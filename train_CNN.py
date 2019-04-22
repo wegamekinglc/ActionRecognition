@@ -10,7 +10,7 @@ N_CLASSES = 101
 BatchSize = 32
 
 
-def fit_model(model, train_data, test_data, weights_dir, input_shape, optical_flow=False):
+def fit_model(model, train_data, test_data, weights_dir, input_shape, optical_flow=False, project_dir='./'):
     try:
         # using sequence or image_from_sequnece generator
         if optical_flow:
@@ -44,7 +44,7 @@ def fit_model(model, train_data, test_data, weights_dir, input_shape, optical_fl
                 verbose=2,
                 callbacks=[checkpointer, tensorboard, earlystopping]
             )
-            data_dir = '/home/changan/ActionRecognition/data'
+            data_dir = os.path.join(project_dir, 'data')
             list_dir = os.path.join(data_dir, 'ucfTrainTestlist')
             UCF_dir = os.path.join(data_dir, 'UCF-101')
             regenerate_data(data_dir, list_dir, UCF_dir)
@@ -54,9 +54,12 @@ def fit_model(model, train_data, test_data, weights_dir, input_shape, optical_fl
 
 
 if __name__ == '__main__':
-    data_dir = '/home/changan/ActionRecognition/data'
+
+    project_dir = "d:/dev/github/ActionRecognition"
+
+    data_dir = os.path.join(project_dir, 'data')
     list_dir = os.path.join(data_dir, 'ucfTrainTestlist')
-    weights_dir = '/home/changan/ActionRecognition/models'
+    weights_dir = os.path.join(project_dir, 'models')
 
 
     # fine tune resnet50
@@ -67,7 +70,7 @@ if __name__ == '__main__':
     input_shape = (10, 216, 216, 3)
     weights_dir = os.path.join(weights_dir, 'finetuned_resnet_RGB_65.h5')
     model = finetuned_resnet(include_top=True, weights_dir=weights_dir)
-    fit_model(model, train_data, test_data, weights_dir, input_shape)
+    fit_model(model, train_data, test_data, weights_dir, input_shape, project_dir=project_dir)
 
     # train CNN using optical flow as input
     # weights_dir = os.path.join(weights_dir, 'temporal_cnn_42.h5')

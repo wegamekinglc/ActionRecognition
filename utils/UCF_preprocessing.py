@@ -4,7 +4,7 @@ import os, cv2, random
 import shutil
 import scipy.misc
 import time
-from .OF_utils import optical_flow_prep
+from utils.OF_utils import optical_flow_prep
 
 
 def combine_list_txt(list_dir):
@@ -218,21 +218,23 @@ def regenerate_data(data_dir, list_dir, UCF_dir):
                   mean_subtraction=False, horizontal_flip=False, random_crop=True, consistent=True, continuous_seq=True)
 
     # compute optical flow data
-    src_dir = '/home/changan/ActionRecognition/data/UCF-Preprocessed-OF'
-    dest_dir = '/home/changan/ActionRecognition/data/OF_data'
+    src_dir = dest_dir
+    dest_dir = os.path.join(data_dir, 'OF_data')
     optical_flow_prep(src_dir, dest_dir, mean_sub=True, overwrite=True)
 
     elapsed_time = time.time() - start_time
     print('Regenerating data takes:', int(elapsed_time / 60), 'minutes')
 
+
 if __name__ == '__main__':
     '''
         extract frames from videos as npy files
     '''
+    project_dir = "d:/dev/github/ActionRecognition"
     sequence_length = 10
     image_size = (216, 216, 3)
 
-    data_dir = '/home/changan/ActionRecognition/data'
+    data_dir = os.path.join(project_dir, 'data')
     list_dir = os.path.join(data_dir, 'ucfTrainTestlist')
     UCF_dir = os.path.join(data_dir, 'UCF-101')
     frames_dir = os.path.join(data_dir, 'frames/mean.npy')
